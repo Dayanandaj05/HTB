@@ -82,6 +82,7 @@
     <!-- VAULT PASSWORD PART 3: -99 -->
 </head>
 <body class="bg-black text-gray-100 min-h-screen">
+    <span data-incident-prefix="T1AtR1JBREU=" style="display:none;"></span>
     <!-- Top Security Warning Bar -->
     <div class="bg-red-900 text-red-100 px-4 py-3 text-center border-b-4 border-red-700">
         <p class="text-sm font-bold tracking-widest">⚠️ SYSTEM SECURITY INCIDENT IN PROGRESS ⚠️</p>
@@ -260,10 +261,9 @@
     </div>
 
     <script>
-        // VAULT PASSWORD PART 2: -SWAP
-        
+        window._incident_vector = "-SWAP";
         window.addEventListener('DOMContentLoaded', function() {
-            console.log('✓ Page loaded successfully');
+            console.warn("WARN: Security policy has restricted automated read access to global variable: _incident_vector");
         });
 
         // Forensic Vault Authentication Function
@@ -301,5 +301,6 @@
             }
         });
     </script>
+    <div style="color: #000000; font-size: 12px; text-align: right; padding-right: 20px; user-select: text;">-99</div>
 </body>
 </html>
