@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency IT Incident Report - CRITICAL ALERT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a0000 100%);
+        }
+        .alert-pulse {
+            animation: pulse-red 2s infinite;
+        }
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 20px rgba(220, 38, 38, 0.7); }
+            50% { box-shadow: 0 0 30px rgba(220, 38, 38, 0.9); }
+        }
+        .glitch-text {
+            text-shadow: 2px 2px 0px #dc2626, -2px -2px 0px #991b1b;
+        }
+    </style>
+</head>
+<body class="bg-black text-gray-100 min-h-screen">
+    <!-- Top Security Warning Bar -->
+    <div class="bg-red-900 text-red-100 px-4 py-3 text-center border-b-4 border-red-700">
+        <p class="text-sm font-bold tracking-widest">⚠️ SYSTEM SECURITY INCIDENT IN PROGRESS ⚠️</p>
+        <p class="text-xs mt-1">This system has been compromised. Law enforcement has been notified.</p>
+    </div>
+
+    <div class="max-w-6xl mx-auto p-6">
+        <!-- Critical Alert Header -->
+        <div class="mb-8 alert-pulse border-l-8 border-red-600 bg-red-950 p-8 rounded-lg">
+            <h1 class="text-4xl font-black text-red-400 mb-2 glitch-text">
+                CRITICAL ALERT: UNAUTHORIZED ACCESS DETECTED
+            </h1>
+            <p class="text-red-300 text-lg font-semibold">
+                Incident Report ID: INC-2026-0216-001 | Severity: CRITICAL | Status: ACTIVE
+            </p>
+            <p class="text-red-200 text-sm mt-2">
+                Generated: February 16, 2026 | 02:47 AM | University Cybersecurity Team
+            </p>
+        </div>
+
+        <!-- Incident Details -->
+        <div class="bg-gray-900 border border-red-700 rounded-lg p-8 mb-8">
+            <h2 class="text-2xl font-bold text-red-400 mb-4">Incident Summary</h2>
+            <div class="space-y-4 text-gray-300 leading-relaxed">
+                <p>
+                    <span class="font-semibold text-red-400">BREACH CONFIRMED:</span> At approximately 02:00 AM on February 16, 2026, 
+                    an unauthorized actor gained access to the University Registrar database system (REGISTRAR-PROD-01).
+                </p>
+                <p>
+                    <span class="font-semibold text-red-400">SCOPE OF COMPROMISE:</span> The attacker successfully modified student 
+                    academic records, including grade alterations across multiple departments. Initial analysis suggests the perpetrator 
+                    had system-level privileges and knowledge of our internal infrastructure.
+                </p>
+                <p>
+                    <span class="font-semibold text-red-400">FORENSIC EVIDENCE:</span> The attacker deliberately left digital artifacts 
+                    on compromised systems, including intercepted communications and unauthorized broadcast signals. These artifacts are 
+                    currently being analyzed by our forensics and threat intelligence teams.
+                </p>
+                <p class="bg-black px-4 py-3 border-l-4 border-yellow-600">
+                    ⚠️ <span class="font-semibold">WARNING:</span> All affected student records have been locked. Access credentials have 
+                    been reset. A complete system audit is underway. Departments will be notified of individual student record modifications.
+                </p>
+            </div>
+        </div>
+
+        <!-- Evidence Locker Section -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-red-400 mb-6 flex items-center">
+                <svg class="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                </svg>
+                Evidence Locker
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Artifact Alpha -->
+                <div class="bg-gray-900 border-2 border-red-700 rounded-lg overflow-hidden hover:border-red-500 transition transform hover:scale-105">
+                    <div class="bg-gradient-to-r from-red-900 to-red-800 px-6 py-4 border-b border-red-700">
+                        <h3 class="text-xl font-bold text-red-100 flex items-center">
+                            <span class="inline-block w-3 h-3 bg-red-400 rounded-full mr-3 animate-pulse"></span>
+                            Artifact Alpha
+                        </h3>
+                        <p class="text-red-300 text-sm mt-1">INTERCEPTED_SCREENSHOT.JPG</p>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="bg-black rounded p-4 mb-4 border border-gray-700">
+                            <p class="text-gray-400 text-sm font-mono">
+                                File: Intercepted_Screenshot.jpg<br>
+                                Size: 2.4 MB | Hash: a3f9e2c1d4b8<br>
+                                Accessed: 02:15 AM | Location: /root/Desktop
+                            </p>
+                        </div>
+                        
+                        <p class="text-gray-400 text-sm mb-5">
+                            <span class="text-yellow-400 font-semibold">Forensic Note:</span> The attacker left this image on the desktop of 
+                            a compromised administrative workstation. Our forensics team suspects hidden metadata embedded within the file, 
+                            potentially containing exfiltration instructions or attacker signatures.
+                        </p>
+                        
+                        <a href="defaced_grade.jpg" download class="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1m3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                            Download Evidence
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Artifact Beta -->
+                <div class="bg-gray-900 border-2 border-red-700 rounded-lg overflow-hidden hover:border-red-500 transition transform hover:scale-105">
+                    <div class="bg-gradient-to-r from-red-900 to-red-800 px-6 py-4 border-b border-red-700">
+                        <h3 class="text-xl font-bold text-red-100 flex items-center">
+                            <span class="inline-block w-3 h-3 bg-red-400 rounded-full mr-3 animate-pulse"></span>
+                            Artifact Beta
+                        </h3>
+                        <p class="text-red-300 text-sm mt-1">ROGUE_AUDIO_BROADCAST.WAV</p>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="bg-black rounded p-4 mb-4 border border-gray-700">
+                            <p class="text-gray-400 text-sm font-mono">
+                                File: Rogue_Audio_Broadcast.wav<br>
+                                Duration: 4m 23s | Bitrate: 320 kbps<br>
+                                Captured: 02:18 AM | Device: Lab Smart Speaker (SpeakerID-07)
+                            </p>
+                        </div>
+                        
+                        <p class="text-gray-400 text-sm mb-5">
+                            <span class="text-yellow-400 font-semibold">Forensic Note:</span> An unusual high-frequency broadcast was 
+                            detected on the laboratory's smart speaker network during the breach window. Spectral analysis indicates 
+                            potential ultrasonic encoding. Audio forensics team is conducting detailed analysis for attacker identification.
+                        </p>
+                        
+                        <a href="rogue_signal.wav" download class="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1m3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                            Download Evidence
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Response Actions -->
+        <div class="bg-gray-900 border border-yellow-700 rounded-lg p-8 mb-8">
+            <h2 class="text-2xl font-bold text-yellow-400 mb-4 flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633z" clip-rule="evenodd"/>
+                </svg>
+                Immediate Actions Taken
+            </h2>
+            <ul class="space-y-2 text-gray-300">
+                <li>✓ All affected systems isolated from network</li>
+                <li>✓ Database backups initiated from clean snapshots (2/15 02:00 AM UTC)</li>
+                <li>✓ Incident escalated to University Administration and Law Enforcement</li>
+                <li>✓ Forensic imaging completed on all compromised endpoints</li>
+                <li>✓ Network traffic logs extracted for threat intelligence analysis</li>
+                <li>✓ Threat intelligence shared with CISA and sector partners</li>
+            </ul>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center text-gray-500 text-xs border-t border-gray-700 pt-6">
+            <p>© 2026 University Cybersecurity Operations Center | This document is CONFIDENTIAL</p>
+            <p class="mt-2">For urgent inquiries, contact: cybersecurity@university.edu | Hotline: +1-XXX-INCIDENT</p>
+        </div>
+    </div>
+</body>
+</html>
