@@ -269,14 +269,28 @@
         // Forensic Vault Authentication Function
         function verifyVaultPassword() {
             const passwordInput = document.getElementById('vault-password');
-            const correctPassword = 'OP-GRADE-SWAP-99';
             const accessError = document.getElementById('access-error');
             const vaultForm = document.getElementById('vault-auth-form');
             const artifactCards = document.getElementById('artifact-cards');
             
-            const enteredPassword = passwordInput.value;
+            const entered = passwordInput.value;
             
-            if (enteredPassword === correctPassword) {
+            // Obfuscated password check: 'OP-GRADE-SWAP-99' shifted by +13
+            const targetVaultKey = [92, 93, 58, 84, 95, 78, 81, 82, 58, 96, 100, 78, 93, 58, 70, 70];
+            
+            let isCorrect = true;
+            if (entered.length !== targetVaultKey.length) {
+                isCorrect = false;
+            } else {
+                for (let i = 0; i < entered.length; i++) {
+                    if (entered.charCodeAt(i) + 13 !== targetVaultKey[i]) {
+                        isCorrect = false;
+                        break;
+                    }
+                }
+            }
+            
+            if (isCorrect) {
                 // Correct password - unlock the vault
                 vaultForm.classList.add('hidden');
                 artifactCards.classList.add('unlocked');
