@@ -19,7 +19,67 @@
         .glitch-text {
             text-shadow: 2px 2px 0px #dc2626, -2px -2px 0px #991b1b;
         }
+        #artifact-cards {
+            display: none;
+        }
+        #artifact-cards.unlocked {
+            display: grid;
+        }
+        #vault-auth-form {
+            display: block;
+        }
+        #vault-auth-form.hidden {
+            display: none;
+        }
+        .vault-input {
+            background: #0a0a0a;
+            border: 2px solid #dc2626;
+            color: #ffffff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: monospace;
+            transition: all 0.3s;
+        }
+        .vault-input:focus {
+            outline: none;
+            border-color: #ef4444;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+        }
+        .vault-btn {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            border: none;
+            color: white;
+            padding: 12px 32px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .vault-btn:hover {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+        }
+        .access-denied {
+            color: #ef4444;
+            font-weight: bold;
+            margin-top: 12px;
+            display: none;
+        }
+        .access-denied.show {
+            display: block;
+            animation: pulse-error 0.6s;
+        }
+        @keyframes pulse-error {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .hint-text {
+            color: #1a1a1a;
+            font-size: 10px;
+        }
     </style>
+    <!-- VAULT PASSWORD PART 3: -99 -->
 </head>
 <body class="bg-black text-gray-100 min-h-screen">
     <!-- Top Security Warning Bar -->
@@ -30,6 +90,7 @@
 
     <div class="max-w-6xl mx-auto p-6">
         <!-- Critical Alert Header -->
+        <!-- VAULT PASSWORD PART 1: OP-GRADE -->
         <div class="mb-8 alert-pulse border-l-8 border-red-600 bg-red-950 p-8 rounded-lg">
             <h1 class="text-4xl font-black text-red-400 mb-2 glitch-text">
                 CRITICAL ALERT: UNAUTHORIZED ACCESS DETECTED
@@ -76,7 +137,33 @@
                 Evidence Locker
             </h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Forensic Vault Authentication Form -->
+            <div id="vault-auth-form" class="mb-8 bg-gradient-to-br from-gray-900 to-black border-2 border-red-600 rounded-lg p-8 max-w-md mx-auto shadow-2xl">
+                <h3 class="text-2xl font-bold text-red-400 mb-6 text-center">Forensic Vault Authentication</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-red-300 text-sm font-bold mb-2">Decryption Key:</label>
+                        <input 
+                            type="password" 
+                            id="vault-password" 
+                            class="vault-input w-full"
+                            placeholder="Enter decryption key..."
+                            autocomplete="off"
+                        />
+                    </div>
+                    
+                    <button onclick="verifyVaultPassword()" class="vault-btn w-full">
+                        Decrypt
+                    </button>
+                    
+                    <div id="access-error" class="access-denied text-center text-sm">
+                        ⚠️ Access Denied - Invalid credentials
+                    </div>
+                </div>
+            </div>
+
+            <div id="artifact-cards" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Artifact Alpha -->
                 <div class="bg-gray-900 border-2 border-red-700 rounded-lg overflow-hidden hover:border-red-500 transition transform hover:scale-105">
                     <div class="bg-gradient-to-r from-red-900 to-red-800 px-6 py-4 border-b border-red-700">
@@ -171,5 +258,48 @@
             <p class="mt-2">For urgent inquiries, contact: cybersecurity@university.edu | Hotline: +1-XXX-INCIDENT</p>
         </div>
     </div>
+
+    <script>
+        // VAULT PASSWORD PART 2: -SWAP
+        
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('✓ Page loaded successfully');
+        });
+
+        // Forensic Vault Authentication Function
+        function verifyVaultPassword() {
+            const passwordInput = document.getElementById('vault-password');
+            const correctPassword = 'OP-GRADE-SWAP-99';
+            const accessError = document.getElementById('access-error');
+            const vaultForm = document.getElementById('vault-auth-form');
+            const artifactCards = document.getElementById('artifact-cards');
+            
+            const enteredPassword = passwordInput.value;
+            
+            if (enteredPassword === correctPassword) {
+                // Correct password - unlock the vault
+                vaultForm.classList.add('hidden');
+                artifactCards.classList.add('unlocked');
+                accessError.classList.remove('show');
+            } else {
+                // Incorrect password - show access denied
+                accessError.classList.add('show');
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        }
+
+        // Allow Enter key to trigger decryption
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('vault-password');
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        verifyVaultPassword();
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
