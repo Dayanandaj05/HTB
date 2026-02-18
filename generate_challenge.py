@@ -97,7 +97,7 @@ def verify_solution(base64_ciphertext, expected_plaintext, shift):
 
 def main():
     # Challenge parameters
-    ORIGINAL_FLAG = "EVENT{SHIFT_WORKS}"
+    ORIGINAL_FLAG = "HBT{psg_1024}"
     CAESAR_SHIFT = 7
     
     print("=== CTF Crypto Challenge Generator ===\n")

@@ -10,11 +10,11 @@ import piexif
 def create_defaced_grade_image():
     """
     Create a JPEG image with hidden EXIF metadata containing the flag:
-    EVENT{HACKER_IP_FOUND} -> Caesar +7 -> LCLUA{OHJRLY_PW_MVBUK}
+    HBT{psg_3072} -> Caesar +13 (ROT13) -> UOG{cft_3072}
     """
     
     # The Caesar cipher flag to hide in EXIF
-    hidden_flag = "LCLUA{OHJRLY_PW_MVBUK}"
+    hidden_flag = "UOG{cft_3072}"
     
     # Create a new image simulating a "defaced" grade screen
     # Dark red/black theme to indicate compromise

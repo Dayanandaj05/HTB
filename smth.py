@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.io import wavfile
 
-def mask_audio_to_spectrum(input_file, output_file="masked_transmission.wav"):
+def mask_audio_to_spectrum(input_file, output_file="masked_transmission_R2.wav"):
     # 1. Load your generated Morse audio
     sample_rate, data = wavfile.read(input_file)
     
@@ -32,4 +32,4 @@ def mask_audio_to_spectrum(input_file, output_file="masked_transmission.wav"):
     print(f"Masked file created: {output_file}")
 
 # Usage: Ensure your file from the online generator is named 'morse.wav'
-mask_audio_to_spectrum("morse.wav")
+mask_audio_to_spectrum("R2_audio.wav")
