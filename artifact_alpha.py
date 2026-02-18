@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Artifact Alpha Generator
-Creates a JPEG with hidden EXIF metadata containing the Caesar cipher flag
+Creates a JPEG with hidden EXIF metadata containing the flag
+Real flag: HTB{psg_grade_swap} -> Caesar +13 (ROT13) -> UGO{cft_tenqr_fjnc}
 """
 
 from PIL import Image
@@ -9,15 +10,15 @@ import piexif
 
 def create_defaced_grade_image():
     """
-    Create a JPEG image with hidden EXIF metadata containing the flag:
-    HBT{psg_3072} -> Caesar +13 (ROT13) -> UOG{cft_3072}
+    Create a JPEG image with hidden EXIF metadata containing the Caesar cipher flag.
+    Real flag: HTB{psg_grade_swap}
+    Encoded (ROT13): UGO{cft_tenqr_fjnc}
     """
     
-    # The Caesar cipher flag to hide in EXIF
-    hidden_flag = "UOG{cft_3072}"
+    # The Caesar cipher flag to hide in EXIF (ROT13 encoded)
+    hidden_flag = "UGO{cft_tenqr_fjnc}"
     
     # Create a new image simulating a "defaced" grade screen
-    # Dark red/black theme to indicate compromise
     width, height = 1024, 768
     image = Image.new('RGB', (width, height), color=(20, 10, 10))
     
@@ -29,11 +30,12 @@ def create_defaced_grade_image():
     exif_dict = {
         "0th": {
             piexif.ImageIFD.Make: b"University_System",
-            piexif.ImageIFD.Model: b"Registrar_Terminal",
-            piexif.ImageIFD.ImageDescription: b"System Screenshot - DO NOT DISTRIBUTE",
+            piexif.ImageIFD.Model: b"REGISTRAR-PROD-01",
+            piexif.ImageIFD.ImageDescription: b"System Screenshot - CONFIDENTIAL",
+            piexif.ImageIFD.Software: b"ScreenCapture v2.1.4",
         },
         "Exif": {
-            piexif.ExifIFD.DateTimeOriginal: b"2026:02:16 02:15:00",
+            piexif.ExifIFD.DateTimeOriginal: b"2026:02:16 02:15:33",
             piexif.ExifIFD.UserComment: hidden_flag.encode('utf-8'),
         },
         "GPS": {}
@@ -46,8 +48,10 @@ def create_defaced_grade_image():
     
     print("✓ Artifact Alpha created: defaced_grade.jpg")
     print(f"  Hidden flag in EXIF metadata: {hidden_flag}")
-    print("  Location: UserComment field")
-    print("  To extract: Use exiftool or PIL to read EXIF UserComment")
+    print("  Real flag (ROT13 decoded): HTB{psg_grade_swap}")
+    print("  Location: EXIF UserComment field")
+    print("  To extract: exiftool defaced_grade.jpg | grep 'User Comment'")
+    print("  To decode: Apply ROT13 cipher")
     
     return 'defaced_grade.jpg'
 
@@ -56,10 +60,10 @@ def verify_exif():
     """Verify the EXIF data was written correctly"""
     try:
         exif_dict = piexif.load('defaced_grade.jpg')
-        user_comment = exif_dict["0th"][piexif.ImageIFD.UserComment]
+        user_comment = exif_dict["Exif"][piexif.ExifIFD.UserComment].decode('utf-8')
         print(f"\n✓ Verification: EXIF UserComment = {user_comment}")
     except Exception as e:
-        print(f"Note: EXIF verification requires PIL/piexif: {e}")
+        print(f"Note: EXIF verification error: {e}")
 
 
 if __name__ == "__main__":

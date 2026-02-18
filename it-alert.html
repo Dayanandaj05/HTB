@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="incident-id" content="INC-2026-0216-001">
+    <meta name="forensic-lead" content="Dr. Sarah Chen">
     <title>Emergency IT Incident Report - CRITICAL ALERT</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -74,15 +76,15 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
-        .hint-text {
-            color: #1a1a1a;
-            font-size: 10px;
+        .log-table {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
         }
     </style>
-    <!-- VAULT PASSWORD PART 3: -99 -->
 </head>
 <body class="bg-black text-gray-100 min-h-screen">
-    <span data-incident-prefix="T1AtR1JBREU=" style="display:none;"></span>
+    <!-- DECOY: HTB{psg_incident_report} -->
+    
     <!-- Top Security Warning Bar -->
     <div class="bg-red-900 text-red-100 px-4 py-3 text-center border-b-4 border-red-700">
         <p class="text-sm font-bold tracking-widest">⚠️ SYSTEM SECURITY INCIDENT IN PROGRESS ⚠️</p>
@@ -91,7 +93,6 @@
 
     <div class="max-w-6xl mx-auto p-6">
         <!-- Critical Alert Header -->
-        <!-- VAULT PASSWORD PART 1: OP-GRADE -->
         <div class="mb-8 alert-pulse border-l-8 border-red-600 bg-red-950 p-8 rounded-lg">
             <h1 class="text-4xl font-black text-red-400 mb-2 glitch-text">
                 CRITICAL ALERT: UNAUTHORIZED ACCESS DETECTED
@@ -100,7 +101,7 @@
                 Incident Report ID: INC-2026-0216-001 | Severity: CRITICAL | Status: ACTIVE
             </p>
             <p class="text-red-200 text-sm mt-2">
-                Generated: February 16, 2026 | 02:47 AM | University Cybersecurity Team
+                Generated: February 16, 2026 | 02:47 AM EST | University Cybersecurity Operations Center
             </p>
         </div>
 
@@ -110,7 +111,7 @@
             <div class="space-y-4 text-gray-300 leading-relaxed">
                 <p>
                     <span class="font-semibold text-red-400">BREACH CONFIRMED:</span> At approximately 02:00 AM on February 16, 2026, 
-                    an unauthorized actor gained access to the University Registrar database system (REGISTRAR-PROD-01).
+                    an unauthorized actor gained access to the University Registrar database system (REGISTRAR-PROD-01, IP: 192.168.10.47).
                 </p>
                 <p>
                     <span class="font-semibold text-red-400">SCOPE OF COMPROMISE:</span> The attacker successfully modified student 
@@ -129,6 +130,63 @@
             </div>
         </div>
 
+        <!-- Network Activity Log -->
+        <div class="bg-gray-900 border border-yellow-700 rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-bold text-yellow-400 mb-4 flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z"/>
+                </svg>
+                Network Activity Log (Last 24 Hours)
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="log-table w-full text-left text-gray-300">
+                    <thead class="bg-black text-yellow-400 border-b border-gray-700">
+                        <tr>
+                            <th class="px-4 py-2">Timestamp</th>
+                            <th class="px-4 py-2">Source IP</th>
+                            <th class="px-4 py-2">Action</th>
+                            <th class="px-4 py-2">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-gray-800 hover:bg-gray-800">
+                            <td class="px-4 py-2">2026-02-16 02:15:33</td>
+                            <td class="px-4 py-2" title="Suspicious internal host">192.168.10.89</td>
+                            <td class="px-4 py-2">Database modification: student_grades</td>
+                            <td class="px-4 py-2 text-red-400">UNAUTHORIZED</td>
+                        </tr>
+                        <tr class="border-b border-gray-800 hover:bg-gray-800">
+                            <td class="px-4 py-2">2026-02-16 02:12:07</td>
+                            <td class="px-4 py-2">192.168.10.89</td>
+                            <td class="px-4 py-2">Privilege escalation attempt</td>
+                            <td class="px-4 py-2 text-red-400">SUCCESS</td>
+                        </tr>
+                        <tr class="border-b border-gray-800 hover:bg-gray-800">
+                            <td class="px-4 py-2">2026-02-16 02:08:41</td>
+                            <td class="px-4 py-2">192.168.10.89</td>
+                            <td class="px-4 py-2">SSH login: sysadmin</td>
+                            <td class="px-4 py-2 text-green-400">SUCCESS</td>
+                        </tr>
+                        <tr class="border-b border-gray-800 hover:bg-gray-800">
+                            <td class="px-4 py-2">2026-02-16 01:47:22</td>
+                            <td class="px-4 py-2">192.168.10.47</td>
+                            <td class="px-4 py-2">Portal login: admin</td>
+                            <td class="px-4 py-2 text-green-400">SUCCESS</td>
+                        </tr>
+                        <tr class="border-b border-gray-800 hover:bg-gray-800">
+                            <td class="px-4 py-2">2026-02-15 23:34:18</td>
+                            <td class="px-4 py-2">10.0.0.15</td>
+                            <td class="px-4 py-2">Backup job completed</td>
+                            <td class="px-4 py-2 text-green-400">SUCCESS</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-xs text-gray-500 mt-3">
+                Note: Attacker IP 192.168.10.89 correlates with Lab Workstation #89 (Building C, Room 204)
+            </p>
+        </div>
+
         <!-- Evidence Locker Section -->
         <div class="mb-8">
             <h2 class="text-3xl font-bold text-red-400 mb-6 flex items-center">
@@ -142,6 +200,14 @@
             <div id="vault-auth-form" class="mb-8 bg-gradient-to-br from-gray-900 to-black border-2 border-red-600 rounded-lg p-8 max-w-md mx-auto shadow-2xl">
                 <h3 class="text-2xl font-bold text-red-400 mb-6 text-center">Forensic Vault Authentication</h3>
                 
+                <div class="bg-black border border-gray-700 rounded p-4 mb-6">
+                    <p class="text-xs text-gray-400 font-mono mb-2">VAULT ACCESS REQUIREMENTS:</p>
+                    <p class="text-xs text-gray-500">• Authorized personnel only</p>
+                    <p class="text-xs text-gray-500">• Decryption key format: [OPERATION]-[TARGET]-[METHOD]-[WORKSTATION]</p>
+                    <p class="text-xs text-gray-500">• All components must be uppercase</p>
+                    <p class="text-xs text-yellow-600 mt-3">Hint: Check incident metadata and network logs</p>
+                </div>
+                
                 <div class="space-y-4">
                     <div>
                         <label class="block text-red-300 text-sm font-bold mb-2">Decryption Key:</label>
@@ -149,17 +215,17 @@
                             type="password" 
                             id="vault-password" 
                             class="vault-input w-full"
-                            placeholder="Enter decryption key..."
+                            placeholder="Enter vault decryption key..."
                             autocomplete="off"
                         />
                     </div>
                     
                     <button onclick="verifyVaultPassword()" class="vault-btn w-full">
-                        Decrypt
+                        🔓 Decrypt Evidence Vault
                     </button>
                     
                     <div id="access-error" class="access-denied text-center text-sm">
-                        ⚠️ Access Denied - Invalid credentials
+                        ⚠️ Access Denied - Invalid decryption key
                     </div>
                 </div>
             </div>
@@ -178,16 +244,17 @@
                     <div class="p-6">
                         <div class="bg-black rounded p-4 mb-4 border border-gray-700">
                             <p class="text-gray-400 text-sm font-mono">
-                                File: Intercepted_Screenshot.jpg<br>
-                                Size: 2.4 MB | Hash: a3f9e2c1d4b8<br>
-                                Accessed: 02:15 AM | Location: /root/Desktop
+                                File: defaced_grade.jpg<br>
+                                Size: 2.4 MB | SHA256: a3f9e2c1d4b8...<br>
+                                Timestamp: 2026-02-16 02:15:33 EST<br>
+                                Location: /root/Desktop/evidence/
                             </p>
                         </div>
                         
                         <p class="text-gray-400 text-sm mb-5">
-                            <span class="text-yellow-400 font-semibold">Forensic Note:</span> The attacker left this image on the desktop of 
-                            a compromised administrative workstation. Our forensics team suspects hidden metadata embedded within the file, 
-                            potentially containing exfiltration instructions or attacker signatures.
+                            <span class="text-yellow-400 font-semibold">Forensic Analysis:</span> Screenshot captured from compromised 
+                            workstation showing modified grade records. EXIF metadata analysis reveals embedded attacker signature. 
+                            Image forensics team has extracted hidden data from file headers.
                         </p>
                         
                         <a href="defaced_grade.jpg" download class="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center">
@@ -212,16 +279,17 @@
                     <div class="p-6">
                         <div class="bg-black rounded p-4 mb-4 border border-gray-700">
                             <p class="text-gray-400 text-sm font-mono">
-                                File: Rogue_Audio_Broadcast.wav<br>
+                                File: rogue_signal.wav<br>
                                 Duration: 4m 23s | Bitrate: 320 kbps<br>
-                                Captured: 02:18 AM | Device: Lab Smart Speaker (SpeakerID-07)
+                                Captured: 2026-02-16 02:18:45 EST<br>
+                                Source: Lab Smart Speaker (Device-ID: SPK-C204-07)
                             </p>
                         </div>
                         
                         <p class="text-gray-400 text-sm mb-5">
-                            <span class="text-yellow-400 font-semibold">Forensic Note:</span> An unusual high-frequency broadcast was 
-                            detected on the laboratory's smart speaker network during the breach window. Spectral analysis indicates 
-                            potential ultrasonic encoding. Audio forensics team is conducting detailed analysis for attacker identification.
+                            <span class="text-yellow-400 font-semibold">Forensic Analysis:</span> Ultrasonic broadcast detected on 
+                            compromised IoT device. Spectrogram analysis reveals encoded data transmission. Audio forensics indicates 
+                            potential data exfiltration attempt using frequency-shift keying.
                         </p>
                         
                         <a href="rogue_signal.wav" download class="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center">
@@ -244,63 +312,89 @@
                 Immediate Actions Taken
             </h2>
             <ul class="space-y-2 text-gray-300">
-                <li>✓ All affected systems isolated from network</li>
-                <li>✓ Database backups initiated from clean snapshots (2/15 02:00 AM UTC)</li>
+                <li>✓ All affected systems isolated from network (Workstation #89 quarantined)</li>
+                <li>✓ Database backups initiated from clean snapshots (2026-02-15 23:34:18 UTC)</li>
                 <li>✓ Incident escalated to University Administration and Law Enforcement</li>
                 <li>✓ Forensic imaging completed on all compromised endpoints</li>
                 <li>✓ Network traffic logs extracted for threat intelligence analysis</li>
-                <li>✓ Threat intelligence shared with CISA and sector partners</li>
+                <li>✓ Threat intelligence shared with CISA and education sector partners</li>
+                <li>✓ Emergency credential rotation for all administrative accounts</li>
             </ul>
         </div>
 
         <!-- Footer -->
         <div class="text-center text-gray-500 text-xs border-t border-gray-700 pt-6">
             <p>© 2026 University Cybersecurity Operations Center | This document is CONFIDENTIAL</p>
-            <p class="mt-2">For urgent inquiries, contact: cybersecurity@university.edu | Hotline: +1-XXX-INCIDENT</p>
+            <p class="mt-2">For urgent inquiries, contact: cybersecurity@university.edu | Hotline: +1-555-INCIDENT</p>
+            <p class="mt-2 text-gray-700">Case Officer: Dr. Sarah Chen | Badge: CSO-2147 | Clearance: Level 4</p>
         </div>
     </div>
 
+    <!-- DECOY: HTB{psg_forensic_vault} -->
     <script>
-        window._incident_vector = "-SWAP";
-        window.addEventListener('DOMContentLoaded', function() {
-            console.warn("WARN: Security policy has restricted automated read access to global variable: _incident_vector");
-        });
+        // Forensic vault authentication system
+        // Password must be constructed from incident details
+        
+        // DECOY FLAG: HTB{psg_evidence_access}
+        const VAULT_CONFIG = {
+            maxAttempts: 3,
+            lockoutDuration: 300000, // 5 minutes
+            attempts: 0
+        };
 
-        // Forensic Vault Authentication Function
         function verifyVaultPassword() {
             const passwordInput = document.getElementById('vault-password');
             const accessError = document.getElementById('access-error');
             const vaultForm = document.getElementById('vault-auth-form');
             const artifactCards = document.getElementById('artifact-cards');
             
-            const entered = passwordInput.value;
+            const entered = passwordInput.value.trim();
             
-            // Obfuscated password check: 'OP-GRADE-SWAP-99' shifted by +13
-            const targetVaultKey = [92, 93, 58, 84, 95, 78, 81, 82, 58, 96, 100, 78, 93, 58, 70, 70];
+            // Real password: OP-GRADE-SWAP-89
+            // Derived from: Operation (OP), Target (GRADE), Method (SWAP), Workstation (89)
+            // Hash comparison for obfuscation
+            const correctHash = '5f93f983524def3dca464469d2cf9f3e'; // MD5 of correct password
             
-            let isCorrect = true;
-            if (entered.length !== targetVaultKey.length) {
-                isCorrect = false;
-            } else {
-                for (let i = 0; i < entered.length; i++) {
-                    if (entered.charCodeAt(i) + 13 !== targetVaultKey[i]) {
-                        isCorrect = false;
-                        break;
-                    }
-                }
-            }
+            // Simple hash function for comparison
+            const enteredHash = simpleHash(entered);
             
-            if (isCorrect) {
-                // Correct password - unlock the vault
+            if (enteredHash === correctHash) {
+                // Correct password - unlock vault
                 vaultForm.classList.add('hidden');
                 artifactCards.classList.add('unlocked');
                 accessError.classList.remove('show');
+                
+                // Log successful access
+                console.log('%c[VAULT]', 'color: #10b981; font-weight: bold', 'Evidence vault unlocked');
+                console.log('%c[FORENSICS]', 'color: #3b82f6', 'Artifacts available for download and analysis');
             } else {
-                // Incorrect password - show access denied
+                // Incorrect password
+                VAULT_CONFIG.attempts++;
                 accessError.classList.add('show');
                 passwordInput.value = '';
                 passwordInput.focus();
+                
+                if (VAULT_CONFIG.attempts >= VAULT_CONFIG.maxAttempts) {
+                    accessError.textContent = '🔒 Maximum attempts exceeded. Vault locked.';
+                    passwordInput.disabled = true;
+                    document.querySelector('.vault-btn').disabled = true;
+                }
+                
+                setTimeout(() => {
+                    accessError.classList.remove('show');
+                }, 3000);
             }
+        }
+
+        // Simple hash function (not cryptographically secure, just for obfuscation)
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return Math.abs(hash).toString(16);
         }
 
         // Allow Enter key to trigger decryption
@@ -313,8 +407,12 @@
                     }
                 });
             }
+            
+            // Console hints for investigators
+            console.log('%c[INCIDENT]', 'color: #dc2626; font-weight: bold', 'INC-2026-0216-001 - Unauthorized Database Access');
+            console.log('%c[HINT]', 'color: #fbbf24', 'Vault key components can be found in the incident report details');
+            console.log('%c[FORMAT]', 'color: #6b7280', 'Key format: [OPERATION]-[TARGET]-[METHOD]-[WORKSTATION]');
         });
     </script>
-    <div style="color: #000000; font-size: 12px; text-align: right; padding-right: 20px; user-select: text;">-99</div>
 </body>
 </html>

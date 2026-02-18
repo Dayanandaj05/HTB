@@ -1,0 +1,28 @@
+# robots.txt - University Web Crawler Policy
+# Last updated: 2026-02-15
+# Webmaster: webadmin@university.edu
+
+User-agent: *
+Disallow: /admin/
+Disallow: /backup/
+Disallow: /old/
+Disallow: /.git/
+Disallow: /config/
+Disallow: /logs/
+Disallow: /temp/
+
+# Legacy systems - DO NOT INDEX
+Disallow: /portal_backup_2025.html
+Disallow: /dashboard_old.html
+Disallow: /system_logs.txt
+
+# DECOY: HTB{psg_robots_file}
+
+# Internal note: Emergency access credentials stored in meta tags
+# Format: sysadmin:[system_version][node_last_octet]
+# Example: For version 2.1.4 on node 192.168.10.47 -> sysadmin:2.1.447
+
+Allow: /student-portal.html
+Allow: /dashboard.html
+
+Sitemap: https://university.edu/sitemap.xml

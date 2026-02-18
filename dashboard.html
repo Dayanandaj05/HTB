@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="node-id" content="AFN-07">
+    <meta name="region" content="US-EAST-1">
+    <meta name="deployment" content="2025-11-03">
     <title>Amazon Fulfillment Node 7 - Dashboard</title>
     <style>
         * {
@@ -256,36 +259,46 @@
 
         <div class="logs-section">
             <h2 class="logs-title">Transmission Logs</h2>
-            <!-- TX_PACKET_ID: TENMVUF7Wk9QTUFfRFZZUlp9 -->
+            <!-- DECOY: HTB{psg_warehouse_logs} -->
             <div class="log-entry">
                 <span class="log-timestamp">[2026-02-16 14:23:17]</span>
                 <span class="log-level">INFO</span>
-                <span>Warehouse sync completed successfully</span>
+                <span>Warehouse sync completed successfully - 15,823 records processed</span>
             </div>
             <div class="log-entry">
                 <span class="log-timestamp">[2026-02-16 14:22:45]</span>
                 <span class="log-level">INFO</span>
-                <span>Inventory database connection established</span>
+                <span>Inventory database connection established (DB-PRIMARY-01: 10.172.45.12)</span>
             </div>
             <div class="log-entry">
                 <span class="log-timestamp">[2026-02-16 14:22:12]</span>
                 <span class="log-level">INFO</span>
-                <span>Queue processor initialized - 147 items pending</span>
+                <span>Queue processor initialized - 147 items pending | Worker threads: 8</span>
             </div>
-            <div class="log-entry">
+            <div class="log-entry" title="Packet transmission identifier">
                 <span class="log-timestamp">[2026-02-16 14:21:58]</span>
                 <span class="log-level">INFO</span>
-                <span>System monitoring services started</span>
+                <span>System monitoring services started | TX_PACKET_ID: SFRCe3BzZ19kYXRhX2V4ZmlsfQ==</span>
             </div>
             <div class="log-entry">
                 <span class="log-timestamp">[2026-02-16 14:21:33]</span>
                 <span class="log-level">INFO</span>
-                <span>Node 7 authentication verified</span>
+                <span>Node 7 authentication verified (Auth-Token: AFN07-2026-Q1-PROD)</span>
             </div>
             <div class="log-entry">
                 <span class="log-timestamp">[2026-02-16 14:21:05]</span>
                 <span class="log-level">INFO</span>
-                <span>Fulfillment center dashboard initialized</span>
+                <span>Fulfillment center dashboard initialized | Version: 3.2.1 | Build: 20251103</span>
+            </div>
+            <div class="log-entry">
+                <span class="log-timestamp">[2026-02-16 14:20:47]</span>
+                <span class="log-level">WARN</span>
+                <span>Unusual network activity detected from internal subnet 192.168.10.0/24</span>
+            </div>
+            <div class="log-entry">
+                <span class="log-timestamp">[2026-02-16 14:20:33]</span>
+                <span class="log-level">INFO</span>
+                <span>Security scan completed - No threats detected</span>
             </div>
         </div>
 
@@ -295,12 +308,19 @@
     </div>
 
     <script>
-        // Internal configuration - DO NOT MODIFY
-        var internal_flag = "HBT{psg_9999}";
-        var api_endpoint = "https://fulfillment-node7.aws.internal/api/v2";
-        var refresh_interval = 30000;
+        // System configuration - Production environment
+        // DECOY: HTB{psg_api_endpoint}
+        const SYSTEM_CONFIG = {
+            nodeId: 'AFN-07',
+            region: 'US-EAST-1',
+            apiEndpoint: 'https://fulfillment-node7.aws.internal/api/v2',
+            refreshInterval: 30000,
+            dbHost: '10.172.45.12',
+            // DECOY FLAG: HTB{psg_config_leak}
+            debugMode: false
+        };
 
-        // Update timestamp
+        // Timestamp update function
         function updateTimestamp() {
             const now = new Date();
             const options = {
@@ -316,17 +336,22 @@
                 now.toLocaleString('en-US', options).replace(',', '');
         }
 
-        // Initialize
+        // Initialize dashboard
         updateTimestamp();
         setInterval(updateTimestamp, 1000);
 
-        // Simulate real-time metrics updates
+        // Real-time metrics simulation
         setInterval(() => {
             const cpuLoad = Math.floor(Math.random() * 20) + 35;
             const memoryLoad = Math.floor(Math.random() * 15) + 60;
             document.querySelectorAll('.metric-value')[1].textContent = cpuLoad + '%';
             document.querySelectorAll('.metric-value')[2].textContent = memoryLoad + '%';
         }, 5000);
+
+        // Console logging for system monitoring
+        console.log('%c[AFN-07]', 'color: #ff9900; font-weight: bold', 'Fulfillment Node 7 Dashboard Initialized');
+        console.log('%c[SYSTEM]', 'color: #4caf50', 'All services operational');
+        console.log('%c[DEBUG]', 'color: #888', 'Transmission logs contain encoded packet identifiers');
     </script>
 </body>
 </html>

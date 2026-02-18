@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="system-id" content="REGISTRAR-PROD-01">
+    <meta name="deployment-date" content="2025-08-12">
+    <meta name="auth-version" content="2.1.4">
     <title>University Student Portal - Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -12,6 +15,7 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-900 to-slate-950 min-h-screen flex items-center justify-center p-4">
+    <!-- HTB{psg_fake_portal} -->
     <div class="w-full max-w-md">
         <!-- Header Section -->
         <div class="text-center mb-8">
@@ -22,6 +26,7 @@
             </div>
             <h1 class="text-3xl font-bold text-white mb-2">Student Portal</h1>
             <p class="text-slate-400">University Academic Management System</p>
+            <p class="text-slate-600 text-xs mt-2" title="Last security patch: 2026-01-15">Build 2.1.4 | Node: 192.168.10.47</p>
         </div>
 
         <!-- Login Card -->
@@ -85,7 +90,16 @@
                 <p class="text-center text-slate-400 text-xs">
                     For technical support, contact IT Services at <a href="mailto:itsupport@university.edu" class="text-blue-400 hover:text-blue-300">itsupport@university.edu</a>
                 </p>
+                <p class="text-center text-slate-500 text-xs mt-2">
+                    Emergency IT Override: Contact helpdesk for recovery token
+                </p>
             </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="mt-4 text-center text-slate-600 text-xs">
+            <p>System Status: <span class="text-green-400">●</span> Operational</p>
+            <p class="mt-1">Active Sessions: 1,247 | Server Load: 34%</p>
         </div>
 
         <!-- Additional Info -->
@@ -95,8 +109,22 @@
     </div>
 
     <script>
-        // EMERGENCY IT OVERRIDE - USE BACKUP TOKEN:
-        var dev_token = "VU9He2NmdF8yMDQ4fQ==";
+        // Authentication module - uses SHA-256 hash verification
+        // Credentials are NOT stored in plaintext for security
+        
+        // DECOY: HTB{psg_admin_panel}
+        const CONFIG = {
+            apiEndpoint: '/api/v2/auth',
+            sessionTimeout: 3600,
+            maxAttempts: 5,
+            // Hash of emergency override credentials (SHA-256)
+            // Username: sysadmin | Password: [REDACTED]
+            authHash: '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'
+        };
+
+        // DECOY FLAG: HTB{psg_test_mode}
+        var debugMode = false;
+        var testCredentials = "admin:HTB{psg_debug_access}";
 
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -105,24 +133,45 @@
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('errorMessage');
 
-            // Check for emergency override credentials
-            if (username === 'admin' && password === 'override') {
-                // Redirect to IT alert page
-                window.location.href = 'it-alert.html';
-            } else {
-                // Show error message
-                errorMessage.classList.remove('hidden');
-                
-                // Clear fields
-                document.getElementById('username').value = '';
-                document.getElementById('password').value = '';
-                
-                // Hide error after 3 seconds
-                setTimeout(() => {
-                    errorMessage.classList.add('hidden');
-                }, 3000);
-            }
+            // Hash the entered credentials for comparison
+            // Real implementation: credentials derived from page clues
+            hashCredentials(username, password).then(hash => {
+                if (hash === CONFIG.authHash) {
+                    // Valid credentials - redirect to incident report
+                    sessionStorage.setItem('auth_token', generateToken());
+                    window.location.href = 'it-alert.html';
+                } else {
+                    // Invalid credentials
+                    errorMessage.classList.remove('hidden');
+                    document.getElementById('username').value = '';
+                    document.getElementById('password').value = '';
+                    
+                    setTimeout(() => {
+                        errorMessage.classList.add('hidden');
+                    }, 3000);
+                }
+            });
         });
+
+        // SHA-256 hashing function
+        async function hashCredentials(user, pass) {
+            const combined = user + ':' + pass;
+            const msgBuffer = new TextEncoder().encode(combined);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
+        }
+
+        // Generate session token
+        function generateToken() {
+            return 'sess_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Easter egg: Console hint for investigators
+        console.log('%c[SYSTEM]', 'color: #3b82f6; font-weight: bold', 'Authentication module loaded');
+        console.log('%c[DEBUG]', 'color: #6b7280', 'Looking for credentials? Check the page metadata and system info.');
+        console.log('%c[HINT]', 'color: #10b981', 'Emergency override format: sysadmin:[BUILD_VERSION][NODE_IP_LAST_OCTET]');
     </script>
 </body>
 </html>
