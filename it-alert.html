@@ -84,6 +84,7 @@
 </head>
 <body class="bg-black text-gray-100 min-h-screen">
     <!-- DECOY: HTB{psg_incident_report} -->
+    <!-- Emergency access code: HTB{psg_emergency_override} -->
     
     <!-- Top Security Warning Bar -->
     <div class="bg-red-900 text-red-100 px-4 py-3 text-center border-b-4 border-red-700">
@@ -203,9 +204,9 @@
                 <div class="bg-black border border-gray-700 rounded p-4 mb-6">
                     <p class="text-xs text-gray-400 font-mono mb-2">VAULT ACCESS REQUIREMENTS:</p>
                     <p class="text-xs text-gray-500">• Authorized personnel only</p>
-                    <p class="text-xs text-gray-500">• Decryption key format: [OPERATION]-[TARGET]-[METHOD]-[WORKSTATION]</p>
+                    <p class="text-xs text-gray-500">• Decryption key must be constructed from incident data</p>
                     <p class="text-xs text-gray-500">• All components must be uppercase</p>
-                    <p class="text-xs text-yellow-600 mt-3">Hint: Check incident metadata and network logs</p>
+                    <p class="text-xs text-yellow-600 mt-3">Hint: Analyze the incident report and network activity</p>
                 </div>
                 
                 <div class="space-y-4">
@@ -330,17 +331,22 @@
         </div>
     </div>
 
-    <!-- DECOY: HTB{psg_forensic_vault} -->
     <script>
         // Forensic vault authentication system
-        // Password must be constructed from incident details
+        // Password must be constructed from incident details - NO HASHES
         
         // DECOY FLAG: HTB{psg_evidence_access}
         const VAULT_CONFIG = {
             maxAttempts: 3,
-            lockoutDuration: 300000, // 5 minutes
-            attempts: 0
+            lockoutDuration: 300000,
+            attempts: 0,
+            // Backup vault key (for disaster recovery only)
+            backupKey: 'HTB{psg_vault_backup}',
+            // Forensic team override
+            forensicOverride: 'HTB{psg_forensic_override}'
         };
+
+        let interactionHints = 0;
 
         function verifyVaultPassword() {
             const passwordInput = document.getElementById('vault-password');
@@ -350,21 +356,13 @@
             
             const entered = passwordInput.value.trim();
             
-            // Real password: OP-GRADE-SWAP-89
-            // Derived from: Operation (OP), Target (GRADE), Method (SWAP), Workstation (89)
-            // Hash comparison for obfuscation
-            const correctHash = '5f93f983524def3dca464469d2cf9f3e'; // MD5 of correct password
-            
-            // Simple hash function for comparison
-            const enteredHash = simpleHash(entered);
-            
-            if (enteredHash === correctHash) {
+            // Logic-based validation - derive from page content
+            if (validateVaultKey(entered)) {
                 // Correct password - unlock vault
                 vaultForm.classList.add('hidden');
                 artifactCards.classList.add('unlocked');
                 accessError.classList.remove('show');
                 
-                // Log successful access
                 console.log('%c[VAULT]', 'color: #10b981; font-weight: bold', 'Evidence vault unlocked');
                 console.log('%c[FORENSICS]', 'color: #3b82f6', 'Artifacts available for download and analysis');
             } else {
@@ -386,15 +384,47 @@
             }
         }
 
-        // Simple hash function (not cryptographically secure, just for obfuscation)
-        function simpleHash(str) {
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                const char = str.charCodeAt(i);
-                hash = ((hash << 5) - hash) + char;
-                hash = hash & hash;
+        // Logic-based vault key validation
+        // Constructs expected key from DOM elements
+        function validateVaultKey(key) {
+            // Extract operation type from incident summary
+            const incidentText = document.querySelector('.bg-gray-900.border.border-red-700')?.textContent || '';
+            const hasGradeModification = incidentText.toLowerCase().includes('grade');
+            
+            // Extract target from incident description
+            const targetMatch = incidentText.match(/grade\s+(alterations|modifications|database)/i);
+            const target = targetMatch ? 'GRADE' : '';
+            
+            // Extract method from forensic notes
+            const forensicText = document.querySelectorAll('.text-gray-400');
+            let method = '';
+            forensicText.forEach(el => {
+                if (el.textContent.toLowerCase().includes('swap')) {
+                    method = 'SWAP';
+                }
+            });
+            
+            // Extract workstation number from network logs
+            const logTable = document.querySelector('.log-table');
+            let workstation = '';
+            if (logTable) {
+                const rows = logTable.querySelectorAll('tbody tr');
+                rows.forEach(row => {
+                    const ipCell = row.querySelector('td');
+                    if (ipCell && ipCell.textContent.includes('192.168.10.89')) {
+                        workstation = '89';
+                    }
+                });
             }
-            return Math.abs(hash).toString(16);
+            
+            // Operation type is implied from context
+            const operation = hasGradeModification ? 'OP' : '';
+            
+            // Construct expected key
+            const expectedKey = `${operation}-${target}-${method}-${workstation}`;
+            
+            // Validate
+            return key === expectedKey && expectedKey === 'OP-GRADE-SWAP-89';
         }
 
         // Allow Enter key to trigger decryption
@@ -406,13 +436,66 @@
                         verifyVaultPassword();
                     }
                 });
+
+                // Interactive hint on focus
+                passwordInput.addEventListener('focus', function() {
+                    if (interactionHints === 0) {
+                        console.log('%c[VAULT]', 'color: #dc2626; font-weight: bold', 'Analyzing vault authentication requirements...');
+                        console.log('%c[HINT]', 'color: #fbbf24', 'The key has multiple components separated by hyphens');
+                        interactionHints++;
+                    }
+                });
             }
             
             // Console hints for investigators
             console.log('%c[INCIDENT]', 'color: #dc2626; font-weight: bold', 'INC-2026-0216-001 - Unauthorized Database Access');
-            console.log('%c[HINT]', 'color: #fbbf24', 'Vault key components can be found in the incident report details');
-            console.log('%c[FORMAT]', 'color: #6b7280', 'Key format: [OPERATION]-[TARGET]-[METHOD]-[WORKSTATION]');
+            console.log('%c[HINT]', 'color: #fbbf24', 'Vault key must be constructed from incident details');
         });
+
+        // Interactive hint on network log hover
+        const logTable = document.querySelector('.log-table');
+        if (logTable) {
+            logTable.addEventListener('mouseenter', function() {
+                if (interactionHints === 1) {
+                    console.log('%c[ANALYSIS]', 'color: #3b82f6', 'Network logs contain critical information');
+                    console.log('%c[TIP]', 'color: #10b981', 'Look for suspicious IP addresses and workstation numbers');
+                    interactionHints++;
+                }
+            });
+        }
+
+        // Hint on incident summary click
+        const incidentSummary = document.querySelector('.bg-gray-900.border.border-red-700');
+        if (incidentSummary) {
+            incidentSummary.addEventListener('click', function() {
+                if (interactionHints === 2) {
+                    console.log('%c[FORENSICS]', 'color: #8b5cf6', 'Incident summary describes the attack method and target');
+                    console.log('%c[FORENSICS]', 'color: #8b5cf6', 'Operation type can be inferred from context');
+                    interactionHints++;
+                }
+            });
+        }
+
+        // Keyboard shortcut: Ctrl+Shift+V for vault analysis
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'V') {
+                console.log('%c[VAULT ANALYSIS]', 'color: #dc2626; font-weight: bold', 'Analyzing incident data...');
+                console.log('- Attack Target:', document.body.textContent.includes('grade') ? 'Grade System' : 'Unknown');
+                console.log('- Suspicious IP:', '192.168.10.89');
+                console.log('- Attack Method:', document.body.textContent.includes('swap') ? 'Data Swap' : 'Unknown');
+                console.log('%c[TIP]', 'color: #fbbf24', 'Combine these elements to construct the vault key');
+            }
+        });
+
+        // Right-click on vault form for hint
+        const vaultForm = document.getElementById('vault-auth-form');
+        if (vaultForm) {
+            vaultForm.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                console.log('%c[VAULT HINT]', 'color: #10b981', 'The vault key is constructed from 4 components');
+                console.log('%c[HINT]', 'color: #6b7280', 'Look for: operation type, target system, attack method, and source location');
+            });
+        }
     </script>
 </body>
 </html>

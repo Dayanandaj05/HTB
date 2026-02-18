@@ -317,7 +317,11 @@
             refreshInterval: 30000,
             dbHost: '10.172.45.12',
             // DECOY FLAG: HTB{psg_config_leak}
-            debugMode: false
+            debugMode: false,
+            // Maintenance mode credentials
+            maintenanceKey: 'HTB{psg_maintenance_mode}',
+            // API authentication token
+            apiToken: 'HTB{psg_api_auth_token}'
         };
 
         // Timestamp update function
@@ -352,6 +356,29 @@
         console.log('%c[AFN-07]', 'color: #ff9900; font-weight: bold', 'Fulfillment Node 7 Dashboard Initialized');
         console.log('%c[SYSTEM]', 'color: #4caf50', 'All services operational');
         console.log('%c[DEBUG]', 'color: #888', 'Transmission logs contain encoded packet identifiers');
+
+        // Keyboard shortcut: Ctrl+Shift+L for log analysis
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'L') {
+                console.log('%c[LOG ANALYSIS]', 'color: #ff9900; font-weight: bold', 'Scanning transmission logs...');
+                const logs = document.querySelectorAll('.log-entry');
+                logs.forEach((log, index) => {
+                    if (log.textContent.includes('TX_PACKET_ID')) {
+                        console.log(`%c[FOUND]`, 'color: #4caf50', `Log entry ${index + 1} contains encoded data`);
+                        console.log('%c[TIP]', 'color: #2196f3', 'Look for base64-encoded strings in the logs');
+                    }
+                });
+            }
+        });
+
+        // Click on logs section for hint
+        const logsSection = document.querySelector('.logs-section');
+        if (logsSection) {
+            logsSection.addEventListener('dblclick', function() {
+                console.log('%c[LOGS]', 'color: #ff9900', 'Transmission logs may contain hidden data');
+                console.log('%c[HINT]', 'color: #2196f3', 'Check for unusual patterns or encoded strings');
+            });
+        }
     </script>
 </body>
 </html>

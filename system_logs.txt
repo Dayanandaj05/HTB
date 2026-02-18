@@ -44,8 +44,8 @@
 # User: Unknown | Session: Unauthorized
 # Action: Grade database modification detected at 02:15:33 EST
 # Evidence collected: defaced_grade.jpg, rogue_signal.wav
-# Vault password format: [OPERATION]-[TARGET]-[METHOD]-[WORKSTATION_NUMBER]
-# Example: OP-GRADE-SWAP-89
+# Vault access: Requires correlation of incident data
+# Components: Operation type, attack target, method used, source workstation
 
 [2026-02-16 11:55:47] INFO: Backup job scheduled for 23:30 EST
 [2026-02-16 11:50:22] INFO: API gateway response time: 87ms (avg)

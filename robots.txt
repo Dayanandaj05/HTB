@@ -18,9 +18,9 @@ Disallow: /system_logs.txt
 
 # DECOY: HTB{psg_robots_file}
 
-# Internal note: Emergency access credentials stored in meta tags
-# Format: sysadmin:[system_version][node_last_octet]
-# Example: For version 2.1.4 on node 192.168.10.47 -> sysadmin:2.1.447
+# Internal note: Emergency access credentials are derived from system metadata
+# Check deployment information and network configuration
+# System administrators should consult the security documentation
 
 Allow: /student-portal.html
 Allow: /dashboard.html

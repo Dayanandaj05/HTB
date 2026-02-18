@@ -20,20 +20,37 @@
 - **Username:** `sysadmin`
 - **Password:** `2.1.447`
 - **How to find:**
-  - Meta tag: `auth-version="2.1.4"`
-  - Subtitle: `Node: 192.168.10.47`
-  - Console hint: Format is `[BUILD_VERSION][NODE_IP_LAST_OCTET]`
-  - robots.txt: Example explanation
+  - Meta tag: `<meta name="auth-version" content="2.1.4">`
+  - Subtitle text: `Node: 192.168.10.47`
+  - Must extract version (2.1.4) and last octet (47)
+  - Combine: 2.1.4 + 47 = 2.1.447
+  - **NO HASH COMPARISON** - Pure DOM-based logic
+  - **NO EXPLICIT FORMAT** - Must deduce from elements
+
+**Interactive Hints:**
+- Focus on username field → System info hint
+- Focus on password field → Metadata hint
+- Triple-click on title → Debug info
+- Hover on build info → Analysis hint
+- Ctrl+Shift+D → System information
+- Double-click logo → Network info
 
 ### Evidence Vault (it-alert.html)
 - **Password:** `OP-GRADE-SWAP-89`
 - **How to find:**
-  - OP = Operation type (implied from incident)
+  - OP = Operation type (inferred from incident context)
   - GRADE = Target (from incident summary: "grade alterations")
-  - SWAP = Method (from forensic notes: "grade swap")
-  - 89 = Workstation (from network logs: 192.168.10.89)
-  - Format hint in vault form
-  - Example in system_logs.txt
+  - SWAP = Method (from forensic notes: mentions "swap")
+  - 89 = Workstation (from network logs table: 192.168.10.89)
+  - **NO HASH COMPARISON** - Pure DOM parsing logic
+  - **NO EXPLICIT FORMAT** - Must correlate information
+
+**Interactive Hints:**
+- Focus on password field → Vault analysis hint
+- Hover on network logs → IP address tip
+- Click on incident summary → Forensic analysis
+- Ctrl+Shift+V → Vault analysis
+- Right-click on vault form → Component hint
 
 ---
 
@@ -168,10 +185,10 @@ python3 artifact_beta.py
 ## 💡 HINTS (If Players Get Stuck)
 
 ### Hint 1 - Portal Access (50 points penalty)
-"The password isn't in the JavaScript. Look at the page metadata (meta tags) and the system information displayed on the page. The console has a hint about the format."
+"The password isn't stored anywhere. Look at the page structure - what information is displayed about the system? Try interacting with different elements. Keyboard shortcuts might help (try Ctrl+Shift+D)."
 
 ### Hint 2 - Vault Password (75 points penalty)
-"The vault password has 4 parts separated by hyphens. Read the entire incident report and network logs carefully. The format is shown in the vault form."
+"The vault password isn't stored anywhere - you must construct it from the incident report. Read everything carefully: the incident summary, network logs table, and forensic notes. Try Ctrl+Shift+V for analysis help."
 
 ### Hint 3 - Image Flag (25 points penalty)
 "EXIF metadata can hide information in images. Use exiftool to extract all metadata and look for the UserComment field. The flag is encoded with ROT13."
