@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="node-id" content="AFN-07">
+    <meta name="region" content="US-EAST-1">
+    <meta name="deployment" content="2025-11-03">
+    <title>Amazon Fulfillment Node 7 - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #ff9900;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #ff9900;
+            font-size: 2em;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-title {
+            font-size: 0.9em;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .card-value {
+            font-size: 1.8em;
+            color: #fff;
+            font-weight: 300;
+        }
+
+        .status-operational {
+            color: #4caf50;
+        }
+
+        .status-active {
+            color: #2196f3;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        .indicator-green {
+            background: #4caf50;
+            box-shadow: 0 0 10px #4caf50;
+        }
+
+        .indicator-blue {
+            background: #2196f3;
+            box-shadow: 0 0 10px #2196f3;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .logs-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .logs-title {
+            font-size: 1.3em;
+            color: #ff9900;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .log-entry {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #b0b0b0;
+            border-left: 3px solid #555;
+        }
+
+        .log-timestamp {
+            color: #888;
+            margin-right: 15px;
+        }
+
+        .log-level {
+            color: #4caf50;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        .metrics {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 0.75em;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 1.2em;
+            color: #fff;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Amazon Fulfillment Node 7</h1>
+            <div class="subtitle">Real-time Operations Dashboard</div>
+        </header>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="card-title">System Status</div>
+                <div class="card-value status-operational">
+                    <span class="status-indicator indicator-green"></span>
+                    Operational
+                </div>
+                <div class="metrics">
+                    <div class="metric">
+                        <div class="metric-label">Uptime</div>
+                        <div class="metric-value">99.8%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">CPU Load</div>
+                        <div class="metric-value">42%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Memory</div>
+                        <div class="metric-value">67%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Queue Monitor</div>
+                <div class="card-value status-active">
+                    <span class="status-indicator indicator-blue"></span>
+                    Active
+                </div>
+                <div class="metrics">
+                    <div class="metric">
+                        <div class="metric-label">Pending</div>
+                        <div class="metric-value">147</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Processing</div>
+                        <div class="metric-value">23</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Completed</div>
+                        <div class="metric-value">8,942</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Last Sync</div>
+                <div class="card-value" id="timestamp"></div>
+                <div class="metrics">
+                    <div class="metric">
+                        <div class="metric-label">Data Volume</div>
+                        <div class="metric-value">2.4 GB</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Records</div>
+                        <div class="metric-value">15,823</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Errors</div>
+                        <div class="metric-value">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="logs-section">
+            <h2 class="logs-title">Transmission Logs</h2>
+            <!-- DECOY: HTB{psg_warehouse_logs} -->
+            <div class="log-entry">
+                <span class="log-timestamp">[2026-02-16 14:23:17]</span>
+                <span class="log-level">INFO</span>
+                <span>Warehouse sync completed successfully - 15,823 records processed</span>
+            </div>
+            <div class="log-entry">
+                <span class="log-timestamp">[2026-02-16 14:22:45]</span>
+                <span class="log-level">INFO</span>
+                <span>Inventory database connection established (DB-PRIMARY-01: 10.172.45.12)</span>
+            </div>
+            <div class="log-entry">
+                <span class="log-timestamp">[2026-02-16 14:22:12]</span>
+                <span class="log-level">INFO</span>
+                <span>Queue processor initialized - 147 items pending | Worker threads: 8</span>
+            </div>
+            <div class="log-entry" title="Packet transmission identifier">
+                <span class="log-timestamp">[2026-02-16 14:21:58]</span>
+                <span class="log-level">INFO</span>
+                <span>System monitoring services started | TX_PACKET_ID: SFRCe3BzZ19kYXRhX2V4ZmlsfQ==</span>
+            </div>
+            <div class="log-entry">
+                <span class="log-timestamp">[2026-02-16 14:21:33]</span>
+                <span class="log-level">INFO</span>
+                <span>Node 7 authentication verified (Auth-Token: AFN07-2026-Q1-PROD)</span>
+            </div>
+            <div class="log-entry">
+                <span class="log-timestamp">[2026-02-16 14:21:05]</span>
+                <span class="log-level">INFO</span>
+                <span>Fulfillment center dashboard initialized | Version: 3.2.1 | Build: 20251103</span>
+            </div>
+            <div class="log-entry">
+                <span class="log-timestamp">[2026-02-16 14:20:47]</span>
+                <span class="log-level">WARN</span>
+                <span>Unusual network activity detected from internal subnet 192.168.10.0/24</span>
+            </div>
+            <div class="log-entry">
+                <span class="log-timestamp">[2026-02-16 14:20:33]</span>
+                <span class="log-level">INFO</span>
+                <span>Security scan completed - No threats detected</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            &copy; 2026 Amazon Web Services | Node 7 | Region: US-EAST-1
+        </div>
+    </div>
+
+    <script>
+        // System configuration - Production environment
+        // DECOY: HTB{psg_api_endpoint}
+        const SYSTEM_CONFIG = {
+            nodeId: 'AFN-07',
+            region: 'US-EAST-1',
+            apiEndpoint: 'https://fulfillment-node7.aws.internal/api/v2',
+            refreshInterval: 30000,
+            dbHost: '10.172.45.12',
+            // DECOY FLAG: HTB{psg_config_leak}
+            debugMode: false,
+            // Maintenance mode credentials
+            maintenanceKey: 'HTB{psg_maintenance_mode}',
+            // API authentication token
+            apiToken: 'HTB{psg_api_auth_token}'
+        };
+
+        // Timestamp update function
+        function updateTimestamp() {
+            const now = new Date();
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            };
+            document.getElementById('timestamp').textContent = 
+                now.toLocaleString('en-US', options).replace(',', '');
+        }
+
+        // Initialize dashboard
+        updateTimestamp();
+        setInterval(updateTimestamp, 1000);
+
+        // Real-time metrics simulation
+        setInterval(() => {
+            const cpuLoad = Math.floor(Math.random() * 20) + 35;
+            const memoryLoad = Math.floor(Math.random() * 15) + 60;
+            document.querySelectorAll('.metric-value')[1].textContent = cpuLoad + '%';
+            document.querySelectorAll('.metric-value')[2].textContent = memoryLoad + '%';
+        }, 5000);
+
+        // Console logging for system monitoring
+        console.log('%c[AFN-07]', 'color: #ff9900; font-weight: bold', 'Fulfillment Node 7 Dashboard Initialized');
+        console.log('%c[SYSTEM]', 'color: #4caf50', 'All services operational');
+        console.log('%c[DEBUG]', 'color: #888', 'Transmission logs contain encoded packet identifiers');
+
+        // Keyboard shortcut: Ctrl+Shift+L for log analysis
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'L') {
+                console.log('%c[LOG ANALYSIS]', 'color: #ff9900; font-weight: bold', 'Scanning transmission logs...');
+                const logs = document.querySelectorAll('.log-entry');
+                logs.forEach((log, index) => {
+                    if (log.textContent.includes('TX_PACKET_ID')) {
+                        console.log(`%c[FOUND]`, 'color: #4caf50', `Log entry ${index + 1} contains encoded data`);
+                        console.log('%c[TIP]', 'color: #2196f3', 'Look for base64-encoded strings in the logs');
+                    }
+                });
+            }
+        });
+
+        // Click on logs section for hint
+        const logsSection = document.querySelector('.logs-section');
+        if (logsSection) {
+            logsSection.addEventListener('dblclick', function() {
+                console.log('%c[LOGS]', 'color: #ff9900', 'Transmission logs may contain hidden data');
+                console.log('%c[HINT]', 'color: #2196f3', 'Check for unusual patterns or encoded strings');
+            });
+        }
+    </script>
+</body>
+</html>

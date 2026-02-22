@@ -1,0 +1,655 @@
+# CTF CHALLENGE - CODE REVIEW PACKAGE
+# Copy this entire file and paste to ChatGPT for improvements
+
+================================================================================
+TABLE OF CONTENTS
+================================================================================
+1. Challenge Overview
+2. student-portal.html (Main Entry Point)
+3. it-alert.html (Incident Report)
+4. dashboard.html (Dashboard with Flag)
+5. artifact_alpha.py (Image Generator)
+6. artifact_beta.py (Audio Generator)
+7. robots.txt
+8. system_logs.txt
+9. Real Flags & Passwords
+10. Questions for Review
+
+================================================================================
+1. CHALLENGE OVERVIEW
+================================================================================
+
+This is a fully static HTML/CSS/JS CTF challenge for LAN-based events.
+
+REAL FLAGS (3):
+- HTB{psg_grade_swap} - Image EXIF (ROT13 encoded)
+- HTB{psg_sonic_exfil} - Audio spectrogram (Caesar +7)
+- HTB{psg_data_exfil} - Dashboard logs (Base64)
+
+PASSWORDS:
+- Portal: sysadmin:2.1.447 (derived from meta tag + IP)
+- Vault: OP-GRADE-SWAP-89 (constructed from incident details)
+
+DECOY FLAGS: 20+ fake flags scattered throughout
+
+AUTHENTICATION: Pure DOM-based logic (NO hashes stored)
+
+================================================================================
+2. STUDENT-PORTAL.HTML (Main Entry Point)
+================================================================================
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="system-id" content="REGISTRAR-PROD-01">
+    <meta name="deployment-date" content="2025-08-12">
+    <meta name="auth-version" content="2.1.4">
+    <title>University Student Portal - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-slate-900 to-slate-950 min-h-screen flex items-center justify-center p-4">
+    <!-- HTB{psg_fake_portal} -->
+    <div class="w-full max-w-md">
+        <div class="text-center mb-8">
+            <div class="inline-block bg-blue-600 rounded-full p-3 mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-bold text-white mb-2">Student Portal</h1>
+            <p class="text-slate-400">University Academic Management System</p>
+            <p class="text-slate-600 text-xs mt-2" title="Last security patch: 2026-01-15" data-build="2.1.4" data-region="us-east">Build 2.1.4 | Node: 192.168.10.47</p>
+        </div>
+
+        <div class="bg-slate-800 rounded-lg shadow-2xl p-8 border border-slate-700">
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-slate-200 mb-2">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your student ID or username" class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" required>
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-slate-200 mb-2">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" required>
+                </div>
+
+                <div id="errorMessage" class="hidden bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg text-sm">Invalid Credentials</div>
+
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 ease-in-out transform hover:scale-105 active:scale-95">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Authentication module - Logic-based validation
+        // No hashes, no plaintext passwords - pure logic
+        
+        // DECOY: HTB{psg_admin_panel}
+        const CONFIG = {
+            apiEndpoint: '/api/v2/auth',
+            sessionTimeout: 3600,
+            maxAttempts: 5,
+            systemVersion: '2.1.4',
+            deploymentYear: 2025,
+            // Legacy backup token (deprecated)
+            backupToken: 'HTB{psg_legacy_token}'
+        };
+
+        // DECOY FLAG: HTB{psg_test_mode}
+        var debugMode = false;
+        var testCredentials = "admin:HTB{psg_debug_access}";
+        var interactionCount = 0;
+        
+        // Development bypass (disabled in production)
+        const devBypass = {
+            enabled: false,
+            key: 'HTB{psg_dev_bypass}',
+            expires: '2025-12-31'
+        };
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Logic-based validation - derive from page elements
+            if (validateCredentials(username, password)) {
+                sessionStorage.setItem('auth_token', generateToken());
+                sessionStorage.setItem('auth_user', username);
+                window.location.href = 'it-alert.html';
+            } else {
+                errorMessage.classList.remove('hidden');
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                
+                setTimeout(() => {
+                    errorMessage.classList.add('hidden');
+                }, 3000);
+            }
+        });
+
+        // Logic-based credential validation
+        // Derives correct credentials from DOM elements
+        function validateCredentials(user, pass) {
+            // Extract version from meta tag
+            const authVersion = document.querySelector('meta[name="auth-version"]')?.content || '';
+            
+            // Extract node IP from subtitle text
+            const subtitleText = document.querySelector('.text-slate-600')?.textContent || '';
+            const nodeMatch = subtitleText.match(/Node: 192\.168\.10\.(\d+)/);
+            const nodeOctet = nodeMatch ? nodeMatch[1] : '';
+            
+            // Construct expected password from page elements
+            const expectedPassword = authVersion + nodeOctet;
+            
+            // Expected username is the system role
+            const expectedUsername = 'sysadmin';
+            
+            // Validate
+            return user === expectedUsername && pass === expectedPassword;
+        }
+
+        // Generate session token
+        function generateToken() {
+            const timestamp = Date.now();
+            const random = Math.random().toString(36).substr(2, 9);
+            return 'sess_' + timestamp + '_' + random;
+        }
+
+        // Interactive hints - triggered by user actions
+        let hintLevel = 0;
+        
+        document.getElementById('username').addEventListener('focus', function() {
+            if (hintLevel === 0) {
+                console.log('%c[SYSTEM]', 'color: #3b82f6; font-weight: bold', 'Authentication module loaded');
+                console.log('%c[INFO]', 'color: #6b7280', 'System credentials are not stored in code.');
+                hintLevel++;
+            }
+        });
+
+        document.getElementById('password').addEventListener('focus', function() {
+            if (hintLevel === 1) {
+                console.log('%c[HINT]', 'color: #10b981', 'Emergency credentials are derived from system metadata.');
+                console.log('%c[TIP]', 'color: #f59e0b', 'Check the page header and system information.');
+                hintLevel++;
+            }
+        });
+
+        // Subtle hint on triple-click of title
+        let titleClicks = 0;
+        document.querySelector('h1').addEventListener('click', function() {
+            titleClicks++;
+            if (titleClicks === 3) {
+                console.log('%c[DEBUG]', 'color: #8b5cf6', 'Username: System administrator role');
+                console.log('%c[DEBUG]', 'color: #8b5cf6', 'Password: Combine version number with network identifier');
+                titleClicks = 0;
+            }
+        });
+
+        // Hover hint on build info
+        document.querySelector('.text-slate-600').addEventListener('mouseenter', function() {
+            if (hintLevel >= 2 && interactionCount === 0) {
+                console.log('%c[ANALYSIS]', 'color: #ec4899', 'Build version and node information detected.');
+                console.log('%c[ANALYSIS]', 'color: #ec4899', 'These values may be significant for authentication.');
+                interactionCount++;
+            }
+        });
+
+        // Keyboard shortcut: Ctrl+Shift+D for debug info
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                console.log('%c[DEBUG MODE]', 'color: #8b5cf6; font-weight: bold', 'System Information:');
+                console.log('- Auth Version:', document.querySelector('meta[name="auth-version"]')?.content);
+                console.log('- Node IP:', document.querySelector('.text-slate-600')?.textContent.match(/192\.168\.10\.\d+/)?.[0]);
+                console.log('%c[TIP]', 'color: #10b981', 'Combine these values for authentication');
+            }
+        });
+
+        // Double-click on logo for system info
+        document.querySelector('.bg-blue-600').addEventListener('dblclick', function() {
+            console.log('%c[SYSTEM INFO]', 'color: #3b82f6; font-weight: bold', 'Portal System v2.1.4');
+            console.log('%c[NETWORK]', 'color: #6b7280', 'Connected to node 192.168.10.47');
+            console.log('%c[AUTH]', 'color: #f59e0b', 'Emergency access requires system administrator credentials');
+        });
+    </script>
+</body>
+</html>
+
+================================================================================
+3. IT-ALERT.HTML (Incident Report - CRITICAL SECTIONS ONLY)
+================================================================================
+
+<!-- Network Activity Log Table -->
+<table class="log-table w-full text-left text-gray-300">
+    <thead class="bg-black text-yellow-400 border-b border-gray-700">
+        <tr>
+            <th class="px-4 py-2">Timestamp</th>
+            <th class="px-4 py-2">Source IP</th>
+            <th class="px-4 py-2">Action</th>
+            <th class="px-4 py-2">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="border-b border-gray-800 hover:bg-gray-800">
+            <td class="px-4 py-2">2026-02-16 02:15:33</td>
+            <td class="px-4 py-2" title="Suspicious internal host">192.168.10.89</td>
+            <td class="px-4 py-2">Database modification: student_grades</td>
+            <td class="px-4 py-2 text-red-400">UNAUTHORIZED</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Vault Authentication JavaScript -->
+<script>
+    const VAULT_CONFIG = {
+        maxAttempts: 3,
+        lockoutDuration: 300000,
+        attempts: 0,
+        backupKey: 'HTB{psg_vault_backup}',
+        forensicOverride: 'HTB{psg_forensic_override}'
+    };
+
+    let interactionHints = 0;
+
+    function verifyVaultPassword() {
+        const passwordInput = document.getElementById('vault-password');
+        const accessError = document.getElementById('access-error');
+        const vaultForm = document.getElementById('vault-auth-form');
+        const artifactCards = document.getElementById('artifact-cards');
+        
+        const entered = passwordInput.value.trim();
+        
+        // Logic-based validation - derive from page content
+        if (validateVaultKey(entered)) {
+            vaultForm.classList.add('hidden');
+            artifactCards.classList.add('unlocked');
+            accessError.classList.remove('show');
+            
+            console.log('%c[VAULT]', 'color: #10b981; font-weight: bold', 'Evidence vault unlocked');
+        } else {
+            VAULT_CONFIG.attempts++;
+            accessError.classList.add('show');
+            passwordInput.value = '';
+            passwordInput.focus();
+            
+            if (VAULT_CONFIG.attempts >= VAULT_CONFIG.maxAttempts) {
+                accessError.textContent = '🔒 Maximum attempts exceeded. Vault locked.';
+                passwordInput.disabled = true;
+                document.querySelector('.vault-btn').disabled = true;
+            }
+            
+            setTimeout(() => {
+                accessError.classList.remove('show');
+            }, 3000);
+        }
+    }
+
+    // Logic-based vault key validation
+    function validateVaultKey(key) {
+        // Extract operation type from incident summary
+        const incidentText = document.querySelector('.bg-gray-900.border.border-red-700')?.textContent || '';
+        const hasGradeModification = incidentText.toLowerCase().includes('grade');
+        
+        // Extract target from incident description
+        const targetMatch = incidentText.match(/grade\s+(alterations|modifications|database)/i);
+        const target = targetMatch ? 'GRADE' : '';
+        
+        // Extract method from forensic notes
+        const forensicText = document.querySelectorAll('.text-gray-400');
+        let method = '';
+        forensicText.forEach(el => {
+            if (el.textContent.toLowerCase().includes('swap')) {
+                method = 'SWAP';
+            }
+        });
+        
+        // Extract workstation number from network logs
+        const logTable = document.querySelector('.log-table');
+        let workstation = '';
+        if (logTable) {
+            const rows = logTable.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const ipCell = row.querySelector('td');
+                if (ipCell && ipCell.textContent.includes('192.168.10.89')) {
+                    workstation = '89';
+                }
+            });
+        }
+        
+        // Operation type is implied from context
+        const operation = hasGradeModification ? 'OP' : '';
+        
+        // Construct expected key
+        const expectedKey = `${operation}-${target}-${method}-${workstation}`;
+        
+        // Validate
+        return key === expectedKey && expectedKey === 'OP-GRADE-SWAP-89';
+    }
+
+    // Interactive hints
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordInput = document.getElementById('vault-password');
+        if (passwordInput) {
+            passwordInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    verifyVaultPassword();
+                }
+            });
+
+            passwordInput.addEventListener('focus', function() {
+                if (interactionHints === 0) {
+                    console.log('%c[VAULT]', 'color: #dc2626; font-weight: bold', 'Analyzing vault authentication requirements...');
+                    console.log('%c[HINT]', 'color: #fbbf24', 'The key has multiple components separated by hyphens');
+                    interactionHints++;
+                }
+            });
+        }
+        
+        console.log('%c[INCIDENT]', 'color: #dc2626; font-weight: bold', 'INC-2026-0216-001 - Unauthorized Database Access');
+        console.log('%c[HINT]', 'color: #fbbf24', 'Vault key must be constructed from incident details');
+    });
+
+    // Keyboard shortcut: Ctrl+Shift+V for vault analysis
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.shiftKey && e.key === 'V') {
+            console.log('%c[VAULT ANALYSIS]', 'color: #dc2626; font-weight: bold', 'Analyzing incident data...');
+            console.log('- Attack Target:', document.body.textContent.includes('grade') ? 'Grade System' : 'Unknown');
+            console.log('- Suspicious IP:', '192.168.10.89');
+            console.log('- Attack Method:', document.body.textContent.includes('swap') ? 'Data Swap' : 'Unknown');
+            console.log('%c[TIP]', 'color: #fbbf24', 'Combine these elements to construct the vault key');
+        }
+    });
+</script>
+
+================================================================================
+4. DASHBOARD.HTML (Transmission Logs Section)
+================================================================================
+
+<div class="logs-section">
+    <h2 class="logs-title">Transmission Logs</h2>
+    <!-- DECOY: HTB{psg_warehouse_logs} -->
+    
+    <div class="log-entry" title="Packet transmission identifier">
+        <span class="log-timestamp">[2026-02-16 14:21:58]</span>
+        <span class="log-level">INFO</span>
+        <span>System monitoring services started | TX_PACKET_ID: SFRCe3BzZ19kYXRhX2V4ZmlsfQ==</span>
+    </div>
+</div>
+
+<script>
+    const SYSTEM_CONFIG = {
+        nodeId: 'AFN-07',
+        region: 'US-EAST-1',
+        apiEndpoint: 'https://fulfillment-node7.aws.internal/api/v2',
+        refreshInterval: 30000,
+        dbHost: '10.172.45.12',
+        debugMode: false,
+        maintenanceKey: 'HTB{psg_maintenance_mode}',
+        apiToken: 'HTB{psg_api_auth_token}'
+    };
+
+    console.log('%c[AFN-07]', 'color: #ff9900; font-weight: bold', 'Fulfillment Node 7 Dashboard Initialized');
+    console.log('%c[SYSTEM]', 'color: #4caf50', 'All services operational');
+    console.log('%c[DEBUG]', 'color: #888', 'Transmission logs contain encoded packet identifiers');
+
+    // Keyboard shortcut: Ctrl+Shift+L for log analysis
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.shiftKey && e.key === 'L') {
+            console.log('%c[LOG ANALYSIS]', 'color: #ff9900; font-weight: bold', 'Scanning transmission logs...');
+            const logs = document.querySelectorAll('.log-entry');
+            logs.forEach((log, index) => {
+                if (log.textContent.includes('TX_PACKET_ID')) {
+                    console.log(`%c[FOUND]`, 'color: #4caf50', `Log entry ${index + 1} contains encoded data`);
+                    console.log('%c[TIP]', 'color: #2196f3', 'Look for base64-encoded strings in the logs');
+                }
+            });
+        }
+    });
+</script>
+
+================================================================================
+5. ARTIFACT_ALPHA.PY (Image Generator)
+================================================================================
+
+#!/usr/bin/env python3
+"""
+Artifact Alpha Generator
+Creates a JPEG with hidden EXIF metadata containing the flag
+Real flag: HTB{psg_grade_swap} -> Caesar +13 (ROT13) -> UGO{cft_tenqr_fjnc}
+"""
+
+from PIL import Image
+import piexif
+
+def create_defaced_grade_image():
+    # The Caesar cipher flag to hide in EXIF (ROT13 encoded)
+    hidden_flag = "UGO{cft_tenqr_fjnc}"
+    
+    # Create a new image simulating a "defaced" grade screen
+    width, height = 1024, 768
+    image = Image.new('RGB', (width, height), color=(20, 10, 10))
+    
+    # Save temporarily to add EXIF
+    temp_path = '/tmp/temp_grade.jpg'
+    image.save(temp_path, 'jpeg')
+    
+    # Create EXIF data with the hidden flag
+    exif_dict = {
+        "0th": {
+            piexif.ImageIFD.Make: b"University_System",
+            piexif.ImageIFD.Model: b"REGISTRAR-PROD-01",
+            piexif.ImageIFD.ImageDescription: b"System Screenshot - CONFIDENTIAL",
+            piexif.ImageIFD.Software: b"ScreenCapture v2.1.4",
+        },
+        "Exif": {
+            piexif.ExifIFD.DateTimeOriginal: b"2026:02:16 02:15:33",
+            piexif.ExifIFD.UserComment: hidden_flag.encode('utf-8'),
+        },
+        "GPS": {}
+    }
+    
+    exif_bytes = piexif.dump(exif_dict)
+    
+    # Save with EXIF data
+    image.save('defaced_grade.jpg', 'jpeg', exif=exif_bytes)
+    
+    print("✓ Artifact Alpha created: defaced_grade.jpg")
+    print(f"  Hidden flag in EXIF metadata: {hidden_flag}")
+    print("  Real flag (ROT13 decoded): HTB{psg_grade_swap}")
+    print("  Location: EXIF UserComment field")
+    print("  To extract: exiftool defaced_grade.jpg | grep 'User Comment'")
+    print("  To decode: Apply ROT13 cipher")
+    
+    return 'defaced_grade.jpg'
+
+if __name__ == "__main__":
+    create_defaced_grade_image()
+
+================================================================================
+6. ARTIFACT_BETA.PY (Audio Generator)
+================================================================================
+
+#!/usr/bin/env python3
+"""
+Artifact Beta Generator
+Creates a WAV file with spectrogram containing the hidden flag
+Real flag: HTB{psg_sonic_exfil} -> Caesar +7 -> OAI{wzn_zvupj_lempss}
+"""
+
+import numpy as np
+import wave
+
+def create_rogue_signal_audio():
+    hidden_flag = "OAI{wzn_zvupj_lempss}"
+    
+    # Audio parameters
+    sample_rate = 44100
+    duration = 4.5
+    num_samples = int(sample_rate * duration)
+    
+    # Create audio data
+    audio_data = np.zeros(num_samples, dtype=np.int16)
+    
+    # Encode the flag as a series of frequency sweeps
+    time = np.arange(num_samples) / sample_rate
+    
+    # Background ultrasonic carrier
+    background = np.sin(2 * np.pi * 20000 * time) * 0.1
+    audio_data = np.int16(background * 32767)
+    
+    # Encode each character as a frequency in the ultrasonic range
+    chunk_size = sample_rate // 2
+    
+    for idx, char in enumerate(hidden_flag):
+        ascii_val = ord(char)
+        frequency = 15000 + (ascii_val * 20)
+        
+        start = idx * chunk_size
+        end = min(start + chunk_size, num_samples)
+        
+        if end > start:
+            chunk_time = (np.arange(end - start) / sample_rate)
+            chirp_freq = np.linspace(frequency - 100, frequency + 100, end - start)
+            sweep = np.sin(2 * np.pi * chirp_freq * chunk_time)
+            audio_data[start:end] += np.int16(sweep * 16384)
+    
+    # Normalize to prevent clipping
+    max_val = np.max(np.abs(audio_data))
+    if max_val > 32767:
+        audio_data = np.int16(audio_data * (32767 / max_val))
+    
+    # Write to WAV file
+    with wave.open('rogue_signal.wav', 'w') as wav_file:
+        wav_file.setnchannels(1)
+        wav_file.setsampwidth(2)
+        wav_file.setframerate(sample_rate)
+        wav_file.writeframes(audio_data.tobytes())
+    
+    print("✓ Artifact Beta created: rogue_signal.wav")
+    print(f"  Hidden flag in spectrogram: {hidden_flag}")
+    print("  Real flag (Caesar -7 decoded): HTB{psg_sonic_exfil}")
+    
+    return 'rogue_signal.wav'
+
+if __name__ == "__main__":
+    create_rogue_signal_audio()
+
+================================================================================
+7. ROBOTS.TXT
+================================================================================
+
+# robots.txt - University Web Crawler Policy
+User-agent: *
+Disallow: /admin/
+Disallow: /backup/
+Disallow: /portal_backup_2025.html
+
+# DECOY: HTB{psg_robots_file}
+
+# Internal note: Emergency access credentials are derived from system metadata
+# Check deployment information and network configuration
+
+Allow: /student-portal.html
+Allow: /dashboard.html
+
+================================================================================
+8. SYSTEM_LOGS.TXT (Relevant Section)
+================================================================================
+
+# Incident Investigation Notes (2026-02-16)
+# Suspicious activity detected from workstation 192.168.10.89
+# Correlates with Lab Workstation #89 (Building C, Room 204)
+# User: Unknown | Session: Unauthorized
+# Action: Grade database modification detected at 02:15:33 EST
+# Evidence collected: defaced_grade.jpg, rogue_signal.wav
+# Vault access: Requires correlation of incident data
+# Components: Operation type, attack target, method used, source workstation
+
+# DECOY FLAG: HTB{psg_system_logs}
+
+================================================================================
+9. REAL FLAGS & PASSWORDS SUMMARY
+================================================================================
+
+REAL FLAGS (Submit these):
+1. HTB{psg_grade_swap}    - Image EXIF (ROT13: UGO{cft_tenqr_fjnc})
+2. HTB{psg_sonic_exfil}   - Audio spectrogram (Caesar+7: OAI{wzn_zvupj_lempss})
+3. HTB{psg_data_exfil}    - Dashboard logs (Base64: SFRCe3BzZ19kYXRhX2V4ZmlsfQ==)
+
+PASSWORDS:
+1. Portal: sysadmin:2.1.447
+   - Derived from: meta tag "2.1.4" + IP last octet "47"
+   - NO hash stored, pure DOM logic
+
+2. Vault: OP-GRADE-SWAP-89
+   - Derived from: incident text + network logs + forensic notes
+   - NO hash stored, pure DOM parsing
+
+DECOY FLAGS (20+):
+- HTB{psg_fake_portal}
+- HTB{psg_admin_panel}
+- HTB{psg_test_mode}
+- HTB{psg_debug_access}
+- HTB{psg_legacy_token}
+- HTB{psg_dev_bypass}
+- HTB{psg_vault_backup}
+- HTB{psg_forensic_override}
+- HTB{psg_maintenance_mode}
+- HTB{psg_api_auth_token}
+- HTB{psg_emergency_override}
+- HTB{psg_warehouse_logs}
+- HTB{psg_robots_file}
+- HTB{psg_system_logs}
+- + more scattered throughout
+
+================================================================================
+10. QUESTIONS FOR CHATGPT REVIEW
+================================================================================
+
+Please review this CTF challenge code and provide improvements for:
+
+1. SECURITY:
+   - Is the DOM-based authentication secure enough?
+   - Any way to bypass the logic validation?
+   - Are there any XSS or injection vulnerabilities?
+   - Should we add rate limiting to prevent brute force?
+
+2. CODE QUALITY:
+   - Can the JavaScript be optimized?
+   - Are there better ways to parse DOM elements?
+   - Should we use more modern JS features (ES6+)?
+   - Any performance issues?
+
+3. USER EXPERIENCE:
+   - Are the interactive hints helpful enough?
+   - Should we add more keyboard shortcuts?
+   - Is the difficulty level appropriate?
+   - Any accessibility concerns?
+
+4. INVESTIGATION DEPTH:
+   - Is the correlation requirement clear?
+   - Are there enough clues without being too obvious?
+   - Should we add more layers of obfuscation?
+   - Are the decoy flags convincing enough?
+
+5. EDGE CASES:
+   - What if JavaScript is disabled?
+   - What if players use automated tools?
+   - What if they inspect network traffic?
+   - Any race conditions or timing issues?
+
+6. IMPROVEMENTS:
+   - What additional features would enhance the challenge?
+   - How can we make it more realistic?
+   - Should we add more artifacts or stages?
+   - Any creative ideas for making it harder/better?
+
+Please provide specific code suggestions and explain your reasoning.
+
+================================================================================
+END OF CODE REVIEW PACKAGE
+================================================================================
