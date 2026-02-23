@@ -259,7 +259,7 @@
 
         <div class="logs-section">
             <h2 class="logs-title">Transmission Logs</h2>
-            <!-- DECOY: HTB{psg_warehouse_logs} -->
+            <!-- SFRCe0NlYXNlcl9lfQ== -->
             <div class="log-entry">
                 <span class="log-timestamp">[2026-02-16 14:23:17]</span>
                 <span class="log-level">INFO</span>
@@ -309,19 +309,19 @@
 
     <script>
         // System configuration - Production environment
-        // DECOY: HTB{psg_api_endpoint}
+        // T1k6IEhUQntwc2dfYXBpX2VuZHBvaW50fQ==
         const SYSTEM_CONFIG = {
             nodeId: 'AFN-07',
             region: 'US-EAST-1',
             apiEndpoint: 'https://fulfillment-node7.aws.internal/api/v2',
             refreshInterval: 30000,
             dbHost: '10.172.45.12',
-            // DECOY FLAG: HTB{psg_config_leak}
+            // Ck9BSXt3em5fVX0=
             debugMode: false,
             // Maintenance mode credentials
             maintenanceKey: 'HTB{psg_maintenance_mode}',
             // API authentication token
-            apiToken: 'HTB{psg_api_auth_token}'
+            apiToken: 'T0FJe3d6bl9od3BfaGJhb19hdnJsdX0='
         };
 
         // Timestamp update function
@@ -375,8 +375,8 @@
         const logsSection = document.querySelector('.logs-section');
         if (logsSection) {
             logsSection.addEventListener('dblclick', function() {
-                console.log('%c[LOGS]', 'color: #ff9900', 'Transmission logs may contain hidden data');
-                console.log('%c[HINT]', 'color: #2196f3', 'Check for unusual patterns or encoded strings');
+                console.log('%c[LOGS]', 'color: #ff9900', 'Transmission logs may contain hidden data, 7 times');
+                console.log('%c[HINT]', 'color: #2196f3', 'Check for unusual patterns or encoded strings,look for pattern it is encoded twice');
             });
         }
     </script>

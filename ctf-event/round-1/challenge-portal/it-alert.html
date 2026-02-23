@@ -83,7 +83,7 @@
     </style>
 </head>
 <body class="bg-black text-gray-100 min-h-screen">
-    <!-- DECOY: HTB{psg_incident_report} -->
+    <!-- psg_incident_report -->
     <!-- Emergency access code: HTB{psg_emergency_override} -->
     
     <!-- Top Security Warning Bar -->
@@ -232,7 +232,7 @@
             </div>
 
             <div id="artifact-cards" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Artifact Alpha -->
+                <!-- QXJ0aWZhY3QgQWxwaGE= -->
                 <div class="bg-gray-900 border-2 border-red-700 rounded-lg overflow-hidden hover:border-red-500 transition transform hover:scale-105">
                     <div class="bg-gradient-to-r from-red-900 to-red-800 px-6 py-4 border-b border-red-700">
                         <h3 class="text-xl font-bold text-red-100 flex items-center">
@@ -255,10 +255,10 @@
                         <p class="text-gray-400 text-sm mb-5">
                             <span class="text-yellow-400 font-semibold">Forensic Analysis:</span> Screenshot captured from compromised 
                             workstation showing modified grade records. EXIF metadata analysis reveals embedded attacker signature. 
-                            Image forensics team has extracted hidden data from file headers.
+                            Image forensics team has extracted hidden data from file headers. The File seems to be encrypted. Could be found in the other artifact.
                         </p>
                         
-                        <a href="artifacts/defaced_grade.jpg" download class="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center">
+                        <a href="image_req.zip" download class="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center">
                             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1m3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
                             </svg>
@@ -267,7 +267,7 @@
                     </div>
                 </div>
 
-                <!-- Artifact Beta -->
+                <!-- QXJ0aWZhY3QgQmV0YQ== -->
                 <div class="bg-gray-900 border-2 border-red-700 rounded-lg overflow-hidden hover:border-red-500 transition transform hover:scale-105">
                     <div class="bg-gradient-to-r from-red-900 to-red-800 px-6 py-4 border-b border-red-700">
                         <h3 class="text-xl font-bold text-red-100 flex items-center">
@@ -280,8 +280,8 @@
                     <div class="p-6">
                         <div class="bg-black rounded p-4 mb-4 border border-gray-700">
                             <p class="text-gray-400 text-sm font-mono">
-                                File: rogue_signal.wav<br>
-                                Duration: 4m 23s | Bitrate: 320 kbps<br>
+                                File: hey_Im.....wav<br>
+                                Duration: 20 | Bitrate: 44 kbps<br>
                                 Captured: 2026-02-16 02:18:45 EST<br>
                                 Source: Lab Smart Speaker (Device-ID: SPK-C204-07)
                             </p>
@@ -293,7 +293,7 @@
                             potential data exfiltration attempt using frequency-shift keying.
                         </p>
                         
-                        <a href="artifacts/rogue_signal.wav" download class="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center">
+                        <a href="hey_Im_walking_here.wav" download class="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center">
                             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1m3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
                             </svg>
@@ -389,41 +389,37 @@
         function validateVaultKey(key) {
             // Extract operation type from incident summary
             const incidentText = document.querySelector('.bg-gray-900.border.border-red-700')?.textContent || '';
-            const hasGradeModification = incidentText.toLowerCase().includes('grade');
+            const operation = /grade/i.test(incidentText) ? 'OP' : '';
             
             // Extract target from incident description
-            const targetMatch = incidentText.match(/grade\s+(alterations|modifications|database)/i);
-            const target = targetMatch ? 'GRADE' : '';
+            const target = /grade/i.test(incidentText) ? 'GRADE' : '';
             
-            // Extract method from forensic notes
-            const forensicText = document.querySelectorAll('.text-gray-400');
-            let method = '';
-            forensicText.forEach(el => {
-                if (el.textContent.toLowerCase().includes('swap')) {
-                    method = 'SWAP';
-                }
-            });
+            // Extract method from page content (check for modify/alter/swap)
+            const pageText = document.body.textContent;
+            const method = /(modify|alter|swap)/i.test(pageText) ? 'SWAP' : '';
             
-            // Extract workstation number from network logs
+            // Extract workstation number ONLY from suspicious IP 192.168.10.89
             const logTable = document.querySelector('.log-table');
             let workstation = '';
             if (logTable) {
                 const rows = logTable.querySelectorAll('tbody tr');
-                rows.forEach(row => {
-                    const ipCell = row.querySelector('td');
-                    if (ipCell && ipCell.textContent.includes('192.168.10.89')) {
-                        workstation = '89';
+                for (const row of rows) {
+                    const cells = row.querySelectorAll('td');
+                    if (cells.length > 1) {
+                        const ipCell = cells[1]; // Second column: Source IP
+                        const ipMatch = ipCell.textContent.match(/192\.168\.10\.89/);
+                        if (ipMatch) {
+                            workstation = '89';
+                            break; // Stop after finding the suspicious IP
+                        }
                     }
-                });
+                }
             }
-            
-            // Operation type is implied from context
-            const operation = hasGradeModification ? 'OP' : '';
             
             // Construct expected key
             const expectedKey = `${operation}-${target}-${method}-${workstation}`;
             
-            // Validate structure: must have all components and match format
+            // Validate: must match exactly and have all components
             return key === expectedKey && 
                    operation.length === 2 && 
                    target.length > 0 && 
